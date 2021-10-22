@@ -1,15 +1,24 @@
 package handlers
 
 import (
-	"encoding/json"
-	"log"
 	"net/http"
+
+	"github.com/matisidler/stock-checker/pkg/config"
+	"github.com/matisidler/stock-checker/pkg/render"
 )
 
-func Home(w http.ResponseWriter, r *http.Request) {
-	prueba, err := json.Marshal("Hola")
-	if err != nil {
-		log.Println("error marshalling prueba", err)
+var Repo *Repository
+
+type Repository struct {
+	Config config.AppConfig
+}
+
+func NewRepo(config config.AppConfig) *Repository {
+	return &Repository{
+		Config: config,
 	}
-	w.Write(prueba)
+}
+
+func (m Repository) Home(w http.ResponseWriter, r *http.Request) {
+	render.ExecutingTemplate(w, r, "home.page.tpl")
 }
